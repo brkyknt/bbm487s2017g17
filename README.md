@@ -1,19 +1,5 @@
-# bbm487s2017g17
+# BBM487 2017 Group 17 
 BBM487 Software Engineering Lab. Project Respository
-
-Roles:
-
-Project Manager - Gismat Kazimli
-
-Architect - Burak Aykanat
-
-Developer - Burak Aykanat
-
-Tester - Rinat Davidov
-
-Analyst - Gismat Kazimli
-
-Any Role - Rinat Davidov
 
 # Group Members
 
