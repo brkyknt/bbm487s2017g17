@@ -5,9 +5,9 @@ BBM487 Software Engineering Lab. Project Respository
 
 | Name          | Surname     | Role                              |
 |:-------------:| -----------:| ---------------------------------:|
-| Gismat        | KAZIMLI     | Project Manager   |    Analyst    |
-| Burak         | AYKANAT     | Architect         |    Developer  |
-| Rinat         | DAVIDOV     | Tester            |    Any Role   |
+| Gismat        | KAZIMLI     | Project Manager - Analyst         |
+| Burak         | AYKANAT     | Architect - Developer             |
+| Rinat         | DAVIDOV     | Tester - Any Role                 |
 
 # Academic Integrity
 
