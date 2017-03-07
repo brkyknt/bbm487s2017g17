@@ -3,11 +3,12 @@ BBM487 Software Engineering Lab. Project Respository
 
 # Group Members
 
-| Name          | Surname     | Role                              |
-|:-------------:| -----------:| ---------------------------------:|
-| Gismat        | KAZIMLI     | Project Manager - Analyst         |
-| Burak         | AYKANAT     | Architect - Developer             |
-| Rinat         | DAVIDOV     | Tester - Any Role                 |
+| Name          | Surname     | Role                                           |
+|:-------------:| -----------:| ----------------------------------------------:|
+| Gismat        | KAZIMLI     | Project Manager - Developer - Tester - Analyst |
+| Burak         | AYKANAT     | Tester - Developer                             |
+| Rinat         | DAVIDOV     | Tester - Analyst                               |
+| Alaaddin      | OZER        | Tester - Analyst - Architect                   |
 
 # Academic Integrity
 
