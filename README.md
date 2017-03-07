@@ -2,6 +2,7 @@
 BBM487 Software Engineering Lab. Project Respository
 
 Roles:
+
 Project Manager - Gismat Kazimli
 
 Architect - Burak Aykanat
