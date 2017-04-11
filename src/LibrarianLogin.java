@@ -89,7 +89,7 @@ public class LibrarianLogin {
 		lblPassword.setText("Password");
 		lblPassword.setBounds(124, 51, 55, 15);
 		
-		passwordtext = new Text(logincomposite, SWT.BORDER);
+		passwordtext = new Text(logincomposite, SWT.BORDER | SWT.PASSWORD);
 		passwordtext.setBounds(180, 48, 127, 21);
 		
 		Button btnLogin = new Button(logincomposite, SWT.NONE);
@@ -109,9 +109,14 @@ public class LibrarianLogin {
 		btnNewButton.setBounds(180, 106, 127, 25);
 		btnNewButton.setText("Customer Login");
 		
+		Label lblLoginFailedEmail = new Label(logincomposite, SWT.NONE);
+		lblLoginFailedEmail.setForeground(SWTResourceManager.getColor(SWT.COLOR_RED));
+		lblLoginFailedEmail.setBounds(180, 137, 214, 15);
+		lblLoginFailedEmail.setText("Login failed. Email or password incorrect");
+		lblLoginFailedEmail.setVisible(false);
+		
 		Composite librariancontrolpanel = new Composite(shlLibrarianLogin, SWT.NONE);
-		RowData rd_librariancontrolpanel = new RowData(428, 208);
-		librariancontrolpanel.setLayoutData(rd_librariancontrolpanel);
+		librariancontrolpanel.setLayoutData(new RowData(428, 208));
 		
 		Button btnAddBook = new Button(librariancontrolpanel, SWT.NONE);
 		btnAddBook.setBounds(69, 55, 75, 25);
@@ -150,17 +155,20 @@ public class LibrarianLogin {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				
-				System.out.println("I am working!");
 				dbHandler=new DatabaseHandler();
 				
 				Librarian result=dbHandler.checkLogin(emailtext.getText(), passwordtext.getText());
 				
 				if(result==null){
+					
 					System.out.println("login failed");
+					lblLoginFailedEmail.setVisible(true);
+					
 				}else{
 					System.out.println(result);
 					
-
+					
+					lblLoginFailedEmail.setVisible(false);
 					LibrarianControlPanel newWindow = new LibrarianControlPanel(result);
 					shlLibrarianLogin.dispose();
 

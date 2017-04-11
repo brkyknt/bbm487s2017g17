@@ -4,9 +4,7 @@ import java.util.Date;
 import com.mysql.*;
 public class DatabaseHandler {
 
-	   // JDBC driver name and database URL
-	  // static final String JDBC_DRIVER = "com.mysql.jdbc.Driver";  
-	   static final String DB_URL = "jdbc:mysql://127.0.0.1:3306";
+		   static final String DB_URL = "jdbc:mysql://127.0.0.1:3306";
 
 	   //  Database credentials 
 	   static final String USER = "root"; // may be different on your mysql server
@@ -62,14 +60,25 @@ public class DatabaseHandler {
 				librarian = new Librarian(rs.getInt("_id"), rs.getString("fullname"), rs.getString("email"),
 						rs.getString("password"));
 				System.out.println("on db handler: "+librarian);
+			}else{
+				librarian=null;
+				return librarian;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
+		   if(password.equals(librarian.getPassword())){
+			   
+			   return librarian;
+
+		   }else{
+			   
+			   librarian=null;
+			   return librarian;
+
+		   }
 		   
-		   
-		   return librarian;
 	   }
 	   
 	   
