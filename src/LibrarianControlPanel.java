@@ -4,6 +4,8 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.events.MouseAdapter;
+import org.eclipse.swt.events.MouseEvent;
 
 public class LibrarianControlPanel {
 
@@ -87,8 +89,21 @@ public class LibrarianControlPanel {
 		button_5.setText("Delete User");
 		button_5.setBounds(280, 138, 75, 25);
 		
+		Button btnLogout = new Button(composite, SWT.NONE);
+		btnLogout.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				
+				LibrarianLogin newlogin = new LibrarianLogin();
+				shell.dispose();
+
+				newlogin.open();
+			}
+		});
+		btnLogout.setBounds(361, 216, 67, 25);
+		btnLogout.setText("Logout");
+		
 		
 		System.out.println("in control panel: "+libAccount);
 	}
-
 }
