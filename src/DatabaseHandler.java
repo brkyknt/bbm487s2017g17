@@ -1,6 +1,8 @@
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Date;
+
+import java.time.*;
+import com.ibm.icu.util.Calendar;
 import com.mysql.*;
 public class DatabaseHandler {
 
@@ -9,9 +11,9 @@ public class DatabaseHandler {
 	   //  Database credentials 
 	   static final String USER = "root"; // may be different on your mysql server
 	   static final String PASS = ""; // may be different on your mysql server
-	   private Connection conn = null;
+	   private static Connection conn = null;
 	   
-	   private void getConnection(){
+	   private static void getConnection(){
 		   		
 		   
 		   try{
@@ -20,6 +22,7 @@ public class DatabaseHandler {
 			      //STEP 3: Open a connection
 			      System.out.println("Connecting to database...");
 			      conn = DriverManager.getConnection(DB_URL,USER,PASS);
+			      
 
 			      //System.out.println("Creating statement...");
 			   
@@ -37,9 +40,9 @@ public class DatabaseHandler {
 		   
 	   }
 	   
-	   public Librarian checkLogin(String email, String password){
+	   public User checkLogin(String email, String password){
 		   
-		   Librarian librarian=null;
+		   User user=null;
 		   Statement stmt = null;
 
 			
@@ -53,33 +56,256 @@ public class DatabaseHandler {
 		try {
 			stmt = conn.createStatement();
 			String sql;
-			sql = "SELECT _id,fullname, email, password FROM librarybookloan.Librarians WHERE email='" + email +"'";
+			sql = "SELECT _id,fullname, email, password, type,totalfine FROM librarybookloan.Users WHERE email='" + email +"'";
 			ResultSet rs = stmt.executeQuery(sql);
 
 			if (rs.first()) {
-				librarian = new Librarian(rs.getInt("_id"), rs.getString("fullname"), rs.getString("email"),
-						rs.getString("password"));
-				System.out.println("on db handler: "+librarian);
+				user = new User(
+						rs.getInt("_id"),
+						rs.getString("fullname"),
+						rs.getString("email"),
+						rs.getString("password"),
+						rs.getString("type"),
+						rs.getFloat("totalfine"));
+				
+				System.out.println("on db handler: "+user);
 			}else{
-				librarian=null;
-				return librarian;
+				user=null;
+				return user;
 			}
 		} catch (SQLException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		   if(password.equals(librarian.getPassword())){
+		   if(password.equals(user.getPassword())){
 			   
-			   return librarian;
+			return user;
 
 		   }else{
 			   
-			   librarian=null;
-			   return librarian;
+			   user=null;
+			   return user;
 
 		   }
 		   
 	   }
+	 
+	   public ArrayList<Book> searchBooks(String title){
+		   
+		   ArrayList<Book> books=new ArrayList<>();
+		   Statement stmt = null;
+
+			
+		      if(conn==null){
+		    	  getConnection();
+		      }else{
+		    	  
+		    	  // connection already established
+		      }
+		      
+		try {
+			stmt = conn.createStatement();
+			int istaken=0;
+			String sql;
+			sql = "SELECT _id,title,author,publication,librarylocation FROM librarybookloan.Books WHERE title='" + title +"' AND istaken='"+istaken+"' ";
+			ResultSet rs = stmt.executeQuery(sql);
+
+			while (rs.next()) {
+				books.add(new Book(
+						rs.getInt("_id"),
+						rs.getString("title"),
+						rs.getString("author"),
+						rs.getString("publication"),
+						rs.getString("librarylocation")));
+				
+				
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		   return books;
+		   
+	   }
+	   
+   public Book insertBook(Book input){
+		   
+	  PreparedStatement statement=null;
+
+			
+		      if(conn==null){
+		    	  getConnection();
+		      }else{
+		    	  
+		    	  // connection already established
+		      }
+		      
+		try {
+			
+			String sql;
+			sql = "INSERT INTO LIBRARYBOOKLOAN.Books(title,author,publication,librarylocation) VALUES (?,?,?,?)";
+			
+			statement = conn.prepareStatement(sql);
+	        statement.setString(1,input.getTitle());
+	        statement.setString(2,input.getAuthor());
+	        statement.setString(3, input.getPublication());
+	        statement.setString(4, input.getLocation());
+	        statement.executeUpdate();
+
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			input=null;
+			e.printStackTrace();
+		}catch(Exception e){
+		      //Handle errors for Class.forName
+			input=null;
+
+		      e.printStackTrace();
+		   }
+		
+		return input;
+		  
+		
+		
+		   
+	   }
+  
+  
+  public boolean insertCheckout(int userId,int bookId){
+	  
+	  
+			// bu fonksiyon checkout yapacak 2 dakikalýk yetiþtiremedim tamamlýcam akþam.
+	  
+	  
+	  PreparedStatement statement=null;
+
+			
+		      if(conn==null){
+		    	  getConnection();
+		      }else{
+		    	  
+		    	  // connection already established
+		      }
+		      
+		try {
+			
+			String sql;
+			sql = "INSERT INTO librarybookloan.UserBooks(startdate, enddate, userid, bookid) VALUES (?,?,?,?)";
+			
+			Calendar calendar = Calendar.getInstance();
+
+			
+			java.util.Date currentDate = calendar.getTime();
+
+			// now, create a java.sql.Date from the java.util.Date
+			
+			LocalDate startDate=LocalDate.now();
+			
+
+			LocalDate endDate=LocalDate.now().plusMonths(1);
+			
+					
+			statement = conn.prepareStatement(sql);
+	        statement.setDate(1, Date.valueOf(startDate));
+	        statement.setDate(2,Date.valueOf(endDate));
+	        statement.setInt(3, userId);
+	        statement.setInt(4, bookId);
+	        statement.executeUpdate();
+
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			
+			e.printStackTrace();
+			return false;
+		}catch(Exception e){
+		      //Handle errors for Class.forName
+			
+
+		      e.printStackTrace();
+		      return false;
+		   }
+		return true;
+		
+		   
+	   }
+ public  User insertUser(User input){
+	   
+	  PreparedStatement statement=null;
+
+			
+		      if(conn==null){
+		    	  getConnection();
+		      }else{
+		    	  
+		    	  // connection already established
+		      }
+		      
+		try {
+			
+			String sql;
+			sql = "INSERT INTO LIBRARYBOOKLOAN.Users(fullname,email,password,type) VALUES (?,?,?,?)";
+			
+			statement = conn.prepareStatement(sql);
+	        statement.setString(1,input.getFullname());
+	        statement.setString(2,input.getEmail());
+	        statement.setString(3, input.getPassword());
+	        statement.setString(4, input.getType());
+	        statement.executeUpdate();
+
+			
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			input=null;
+			e.printStackTrace();
+		}catch(Exception e){
+		      //Handle errors for Class.forName
+			input=null;
+
+		      e.printStackTrace();
+		   }
+		return input;
+		  
+		
+		
+		   
+	   }
+
+public  ArrayList<Book> getUserBooks(int id) {
+	 ArrayList<Book> books=new ArrayList<>();
+	   Statement stmt = null;
+
+		
+	      if(conn==null){
+	    	  getConnection();
+	      }else{
+	    	  
+	    	  // connection already established
+	      }
+	      
+	try {
+		stmt = conn.createStatement();
+		String sql;
+		sql = "SELECT Books._id,Books.title,author,publication,librarylocation FROM librarybookloan.UserBooks INNER JOIN librarybookloan.Books ON UserBooks.bookid=Books._id WHERE userid= '" + id +"'";
+		ResultSet rs = stmt.executeQuery(sql);
+
+		while (rs.next()) {
+			books.add(new Book(
+					rs.getInt("_id"),
+					rs.getString("title"),
+					rs.getString("author"),
+					rs.getString("publication"),
+					rs.getString("librarylocation")));
+			
+			
+		}
+	} catch (SQLException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
+	   return books;	
+}
 	   
 	   
 	   

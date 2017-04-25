@@ -9,8 +9,8 @@ import org.eclipse.swt.events.MouseEvent;
 
 public class LibrarianControlPanel {
 
-	protected Shell shell;
-	private static Librarian libAccount;
+	protected Shell shlLibrarianControlPanel;
+	private static User libAccount;
 	/**
 	 * Launch the application.
 	 * @param args
@@ -26,7 +26,7 @@ public class LibrarianControlPanel {
 		}
 	}
 
-	public LibrarianControlPanel(Librarian libAccount) {
+	public LibrarianControlPanel(User libAccount) {
 		super();
 		this.libAccount = libAccount;
 	}
@@ -37,9 +37,9 @@ public class LibrarianControlPanel {
 	public void open() {
 		Display display = Display.getDefault();
 		createContents();
-		shell.open();
-		shell.layout();
-		while (!shell.isDisposed()) {
+		shlLibrarianControlPanel.open();
+		shlLibrarianControlPanel.layout();
+		while (!shlLibrarianControlPanel.isDisposed()) {
 			if (!display.readAndDispatch()) {
 				display.sleep();
 			}
@@ -50,16 +50,24 @@ public class LibrarianControlPanel {
 	 * Create contents of the window.
 	 */
 	protected void createContents() {
-		shell = new Shell();
-		shell.setSize(450, 300);
-		shell.setText("SWT Application");
+		shlLibrarianControlPanel = new Shell();
+		shlLibrarianControlPanel.setSize(450, 300);
+		shlLibrarianControlPanel.setText("Librarian Control Panel");
 		
-		Composite composite = new Composite(shell, SWT.NONE);
+		Composite composite = new Composite(shlLibrarianControlPanel, SWT.NONE);
 		composite.setBounds(0, 0, 428, 251);
 		
-		Button button = new Button(composite, SWT.NONE);
-		button.setText("Add Book");
-		button.setBounds(69, 55, 75, 25);
+		Button addbook = new Button(composite, SWT.NONE);
+		addbook.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				
+				AddBook addbookshell=new AddBook(null);
+				addbookshell.open();
+			}
+		});
+		addbook.setText("Add Book");
+		addbook.setBounds(69, 55, 75, 25);
 		
 		Button button_1 = new Button(composite, SWT.NONE);
 		button_1.setText("Edit Book");
@@ -78,6 +86,14 @@ public class LibrarianControlPanel {
 		label_1.setBounds(280, 23, 88, 15);
 		
 		Button button_3 = new Button(composite, SWT.NONE);
+		button_3.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				
+				AddUser addUserShell=new AddUser(null);
+				addUserShell.open();
+			}
+		});
 		button_3.setText("Add User");
 		button_3.setBounds(280, 55, 75, 25);
 		
@@ -94,8 +110,8 @@ public class LibrarianControlPanel {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				
-				LibrarianLogin newlogin = new LibrarianLogin();
-				shell.dispose();
+				Login newlogin = new Login();
+				shlLibrarianControlPanel.dispose();
 
 				newlogin.open();
 			}
