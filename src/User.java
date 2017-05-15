@@ -2,10 +2,10 @@
 public class User {
 
 	int id;
-	String fullName;
-	String email;
-	String password;
-	String type;
+	private String fullName;
+	private String email;
+	private String password;
+	private String type;
 	private float totalFine;
 
 	// type is librarian or customer
@@ -79,8 +79,13 @@ public class User {
 
 	@Override
 	public String toString() {
-		return "User [id=" + id + ", fullname=" + fullName + ", email=" + email + ", password=" + password + ", type="
-				+ type + "]";
+		return "User{" +
+				"id=" + id +
+				", fullName='" + fullName + '\'' +
+				", email='" + email + '\'' +
+				", password='" + password + '\'' +
+				", type='" + type + '\'' +
+				", totalFine=" + totalFine +
+				'}';
 	}
-
 }
