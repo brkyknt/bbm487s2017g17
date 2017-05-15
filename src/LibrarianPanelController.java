@@ -1,10 +1,12 @@
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import javafx.util.Pair;
@@ -33,11 +35,6 @@ public class LibrarianPanelController implements Initializable{
     public TableColumn<User,Float> totalFine;
 
 
-    public Button addButton;
-    public TextField nameInput;
-    public TextField emailInput;
-    public PasswordField passwordInput;
-    public CheckBox userTypeCheckbox;
 
 
     private User librarian;
@@ -60,7 +57,7 @@ public class LibrarianPanelController implements Initializable{
 
     }
 
-    private void loadUserList(){
+    public void loadUserList(){
        // userList.getItems().clear();
         userName.setCellValueFactory(new PropertyValueFactory<User,String>("fullname"));
         userEmail.setCellValueFactory(new PropertyValueFactory<User,String>("email"));
@@ -72,7 +69,7 @@ public class LibrarianPanelController implements Initializable{
 
     }
 
-    private void loadBookList(){
+    public void loadBookList(){
 //        bookList.getItems().clear();
         bookTitle.setCellValueFactory(new PropertyValueFactory<Book,String>("title"));
         bookAuthor.setCellValueFactory(new PropertyValueFactory<Book,String>("author"));
@@ -110,8 +107,78 @@ public class LibrarianPanelController implements Initializable{
         }
     }
 
-    public void addDialogButton(ActionEvent actionEvent) {
 
+
+    public void addBook(MouseEvent mouseEvent) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("addbookpanel.fxml"));
+
+        Scene scene = null;
+        try {
+            scene = new Scene(fxmlLoader.load(), 480, 280);
+
+            Stage stage = new Stage();
+            stage.setTitle("Add Book");
+            stage.setScene(scene);
+
+
+
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void userSelected(MouseEvent mouseEvent) {
+
+       // System.out.println(userList.getSelectionModel().getSelectedItem().getFullname());
+
+
+    }
+
+    public void bookSelected(MouseEvent mouseEvent) {
+
+        final ContextMenu contextMenu = new ContextMenu();
+        MenuItem edit = new MenuItem("Edit");
+        MenuItem delete = new MenuItem("Delete");
+        contextMenu.getItems().addAll(edit,delete);
+        edit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("editBookPanel.fxml"));
+
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load(), 480, 280);
+
+                    Stage stage = new Stage();
+                    stage.setTitle("Edit Book");
+                    stage.setScene(scene);
+                    EditBookController editBookController=fxmlLoader.getController();
+                    editBookController.setBook(bookList.getSelectionModel().getSelectedItem());
+
+                    stage.show();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        delete.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                DatabaseHandler.deleteBook( bookList.getSelectionModel().getSelectedItem().getId());
+                loadBookList();
+
+
+            }
+        });
+
+        bookList.setContextMenu(contextMenu);
 
     }
 }

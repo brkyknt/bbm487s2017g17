@@ -10,12 +10,14 @@
 <?import javafx.scene.control.SeparatorMenuItem?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LibrarianPanelController">
+<VBox prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" fx:controller="LibrarianPanelController">
   <children>
     <MenuBar VBox.vgrow="NEVER">
       <menus>
@@ -58,7 +60,7 @@
     </MenuBar>
     <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="-1.0" prefWidth="-1.0" VBox.vgrow="ALWAYS">
          <children>
-            <HBox layoutX="14.0" layoutY="5.0" prefHeight="24.0" prefWidth="272.0">
+            <HBox layoutX="14.0" layoutY="8.0" prefHeight="24.0" prefWidth="322.0">
                <children>
                   <Label text="User List">
                      <font>
@@ -84,6 +86,14 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Button>
+                  <ImageView fx:id="userReload" fitHeight="26.0" fitWidth="200.0" onMouseClicked="#loadUserList" pickOnBounds="true" preserveRatio="true" translateX="180.0">
+                     <image>
+                        <Image url="@reload.png" />
+                     </image>
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                  </ImageView>
                </children>
             </HBox>
             <HBox layoutX="374.0" layoutY="8.0" prefHeight="24.0" prefWidth="272.0">
@@ -101,7 +111,7 @@
                         <Font name="System Bold" size="15.0" />
                      </font>
                   </Label>
-                  <Button graphicTextGap="1.0" mnemonicParsing="false" style="-fx-background-color: #00E816; -fx-background-radius: 5em;" text="+" textFill="WHITE">
+                  <Button graphicTextGap="1.0" mnemonicParsing="false" onMouseClicked="#addBook" style="-fx-background-color: #00E816; -fx-background-radius: 5em;" text="+" textFill="WHITE">
                      <font>
                         <Font name="System Bold" size="11.0" />
                      </font>
@@ -112,9 +122,14 @@
                         <Insets left="5.0" />
                      </HBox.margin>
                   </Button>
+                  <ImageView fitHeight="26.0" fitWidth="200.0" onMouseClicked="#loadBookList" pickOnBounds="true" preserveRatio="true" translateX="120.0">
+                     <image>
+                        <Image url="@reload.png" />
+                     </image>
+                  </ImageView>
                </children>
             </HBox>
-            <TableView fx:id="userList" layoutX="14.0" layoutY="42.0" prefHeight="522.0" prefWidth="322.0">
+            <TableView fx:id="userList" onMouseClicked="#userSelected" layoutX="14.0" layoutY="42.0" prefHeight="522.0" prefWidth="322.0">
               <columns>
                 <TableColumn fx:id="userName" prefWidth="130.0" text="Name" />
                 <TableColumn fx:id="userEmail" prefWidth="100.0" text="Email" />
@@ -123,7 +138,7 @@
               </columns>
             </TableView>
 
-            <TableView fx:id="bookList" layoutX="374.0" layoutY="42.0" prefHeight="522.0" prefWidth="272.0">
+            <TableView fx:id="bookList" layoutX="374.0" layoutY="42.0" onMouseClicked="#bookSelected" prefHeight="522.0" prefWidth="272.0">
                <columns>
                   <TableColumn fx:id="bookTitle" prefWidth="100.0" text="Title" />
                   <TableColumn fx:id="bookAuthor" prefWidth="81.0" text="Author" />

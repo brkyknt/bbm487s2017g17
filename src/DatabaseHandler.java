@@ -48,13 +48,8 @@ public class DatabaseHandler {
         User user=null;
         Statement stmt = null;
 
+        getConnection();
 
-        if(conn==null){
-            getConnection();
-        }else{
-
-            // connection already established
-        }
 
         try {
             stmt = conn.createStatement();
@@ -76,6 +71,8 @@ public class DatabaseHandler {
                 user=null;
                 return user;
             }
+
+            conn.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -99,12 +96,9 @@ public class DatabaseHandler {
         Statement stmt = null;
 
 
-        if(conn==null){
-            getConnection();
-        }else{
 
-            // connection already established
-        }
+            getConnection();
+
 
         try {
             stmt = conn.createStatement();
@@ -123,6 +117,8 @@ public class DatabaseHandler {
 
 
             }
+
+            conn.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -138,12 +134,9 @@ public class DatabaseHandler {
         ArrayList<Book> books=new ArrayList<>();
         Statement stmt = null;
 
-        if(conn==null){
-            getConnection();
-        }else{
 
-            // connection already established
-        }
+            getConnection();
+
 
         try {
             stmt = conn.createStatement();
@@ -162,6 +155,8 @@ public class DatabaseHandler {
 
 
             }
+
+            conn.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -175,9 +170,9 @@ public class DatabaseHandler {
         ArrayList<User> users=new ArrayList<>();
         Statement stmt = null;
 
-        if(conn==null){
+
             getConnection();
-        }
+
 
         try {
             stmt = conn.createStatement();
@@ -202,6 +197,8 @@ public class DatabaseHandler {
             for (int i = 0; i < users.size(); i++) {
                 System.out.println(users.get(i).toString());
             }
+
+            conn.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();
@@ -216,12 +213,8 @@ public class DatabaseHandler {
         PreparedStatement statement=null;
 
 
-        if(conn==null){
-            getConnection();
-        }else{
 
-            // connection already established
-        }
+            getConnection();
 
         try {
 
@@ -235,7 +228,7 @@ public class DatabaseHandler {
             statement.setString(4, input.getLocation());
             statement.executeUpdate();
 
-
+            conn.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             input=null;
@@ -254,6 +247,88 @@ public class DatabaseHandler {
 
     }
 
+    public static Book updateBook(Book input){
+
+        PreparedStatement statement=null;
+
+
+
+        getConnection();
+
+        try {
+
+            String sql;
+            //sql = "INSERT INTO LIBRARYBOOKLOAN.Books(title,author,publication,librarylocation) VALUES (?,?,?,?)";
+            sql="UPDATE librarybookloan.Books SET title=?,author=?,publication=?,librarylocation=? WHERE `_id`=?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setString(1,input.getTitle());
+            statement.setString(2,input.getAuthor());
+            statement.setString(3, input.getPublication());
+            statement.setString(4, input.getLocation());
+            statement.setInt(5, input.getId());
+
+            int result=statement.executeUpdate();
+            System.out.println("result: "+result);
+            conn.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            input=null;
+            e.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            input=null;
+
+            e.printStackTrace();
+        }
+
+        return input;
+
+
+
+
+    }
+
+    public static int deleteBook(int bookId){
+
+        PreparedStatement statement=null;
+
+
+        int result=0;
+        getConnection();
+
+        try {
+
+            String sql;
+            //sql = "INSERT INTO LIBRARYBOOKLOAN.Books(title,author,publication,librarylocation) VALUES (?,?,?,?)";
+            sql="DELETE FROM librarybookloan.Books  WHERE `_id`=?";
+
+            statement = conn.prepareStatement(sql);
+
+            statement.setInt(1,bookId);
+
+            result=statement.executeUpdate();
+            System.out.println("result: "+result);
+            conn.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+
+            e.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            result=0;
+
+            e.printStackTrace();
+        }
+
+        return result;
+
+
+
+
+    }
+
+
 
     public static boolean insertCheckout(int userId,int bookId){
 
@@ -264,12 +339,9 @@ public class DatabaseHandler {
         PreparedStatement statement=null;
 
 
-        if(conn==null){
-            getConnection();
-        }else{
 
-            // connection already established
-        }
+            getConnection();
+
 
         try {
 
@@ -296,7 +368,7 @@ public class DatabaseHandler {
             statement.setInt(4, bookId);
             statement.executeUpdate();
 
-
+            conn.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
 
@@ -318,12 +390,7 @@ public class DatabaseHandler {
         PreparedStatement statement=null;
 
 
-        if(conn==null){
-            getConnection();
-        }else{
-
-            // connection already established
-        }
+        getConnection();
 
         try {
 
@@ -337,7 +404,7 @@ public class DatabaseHandler {
             statement.setString(4, input.getType());
             statement.executeUpdate();
 
-
+            conn.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             input=null;
@@ -348,6 +415,8 @@ public class DatabaseHandler {
 
             e.printStackTrace();
         }
+
+
         return input;
 
 
@@ -360,12 +429,7 @@ public class DatabaseHandler {
         Statement stmt = null;
 
 
-        if(conn==null){
-            getConnection();
-        }else{
-
-            // connection already established
-        }
+        getConnection();
 
         try {
             stmt = conn.createStatement();
@@ -383,6 +447,8 @@ public class DatabaseHandler {
 
 
             }
+
+            conn.close();
         } catch (SQLException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

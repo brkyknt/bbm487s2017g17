@@ -7,11 +7,13 @@
 <?import javafx.scene.control.PasswordField?>
 <?import javafx.scene.control.SplitPane?>
 <?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.Tooltip?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" fx:controller="AddUserController" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.111" xmlns:fx="http://javafx.com/fxml/1" >
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="280.0" prefWidth="480.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="AddUserController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="84.0" prefWidth="498.0" text="Please enter the user information" textAlignment="CENTER">
          <font>
@@ -21,13 +23,16 @@
       <AnchorPane>
          <children>
             <Label alignment="CENTER_RIGHT" layoutX="113.0" prefHeight="24.0" prefWidth="79.0" text="Full name" textAlignment="CENTER" />
-            <TextField fx:id="nameInput" layoutX="213.0" />
+            <TextField fx:id="nameInput" layoutX="213.0" onKeyReleased="#textTyped">
+               <tooltip>
+                  <Tooltip text="Can not be empty" />
+               </tooltip></TextField>
          </children>
       </AnchorPane>
       <AnchorPane layoutX="10.0" layoutY="94.0">
          <children>
             <Label alignment="CENTER_RIGHT" layoutX="113.0" prefHeight="24.0" prefWidth="79.0" text="Email" textAlignment="CENTER" />
-            <TextField fx:id="emailInput" layoutX="213.0" />
+            <TextField fx:id="emailInput" layoutX="213.0" onKeyReleased="#textTyped" />
          </children>
          <VBox.margin>
             <Insets top="5.0" />
@@ -36,15 +41,16 @@
       <AnchorPane layoutX="10.0" layoutY="119.0">
          <children>
             <Label alignment="CENTER_RIGHT" layoutX="113.0" prefHeight="24.0" prefWidth="79.0" text="Password" textAlignment="CENTER" />
-            <PasswordField fx:id="passwordInput" layoutX="213.0" />
+            <PasswordField fx:id="passwordInput" layoutX="213.0" onKeyReleased="#textTyped" />
          </children>
          <VBox.margin>
             <Insets top="5.0" />
          </VBox.margin>
       </AnchorPane>
-      <AnchorPane prefHeight="22.0" prefWidth="498.0">
+      <AnchorPane prefHeight="60.0" prefWidth="480.0">
          <children>
             <CheckBox fx:id="userTypeCheckbox" layoutX="213.0" layoutY="5.0" mnemonicParsing="false" text="Librarian" />
+            <Label layoutX="144.0" layoutY="25.0" text=" " fx:id="resultLabel" />
          </children>
          <opaqueInsets>
             <Insets top="5.0" />
@@ -57,12 +63,13 @@
         <items>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="160.0" prefWidth="100.0">
                <children>
-                  <Button fx:id="addButton" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#addDialogButton" prefHeight="25.0" prefWidth="185.0" text="ADD" />
+                  <Button fx:id="addButton" disable="true" layoutX="26.0" layoutY="14.0" mnemonicParsing="false" onAction="#addDialogButton" prefHeight="25.0" prefWidth="185.0" style="-fx-background: #D6CDCF;" text="ADD" />
+                  <ImageView fitHeight="36.0" fitWidth="32.0" layoutX="168.0" pickOnBounds="true" preserveRatio="true" />
                </children>
             </AnchorPane>
           <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="59.0" prefWidth="236.0">
                <children>
-                  <Button layoutX="26.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="185.0" text="CANCEL" />
+                  <Button layoutX="26.0" layoutY="14.0" mnemonicParsing="false" prefHeight="25.0" prefWidth="185.0" fx:id="cancelButton" onAction="#closeWindow" text="CANCEL" />
                </children>
             </AnchorPane>
         </items>
