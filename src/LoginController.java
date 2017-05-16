@@ -39,7 +39,7 @@ public class LoginController {
             } else {
 
 
-                System.out.println("it is user");
+               openUserPanel(result,actionEvent);
             }
 
 
@@ -61,6 +61,34 @@ public class LoginController {
             stage.setScene(scene);
             LibrarianPanelController librarianController=fxmlLoader.getController();
             librarianController.setLibrarian(librarian);
+
+            stage.show();
+            ((Node)(actionEvent.getSource())).getScene().getWindow().hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    private void openUserPanel(User user, ActionEvent actionEvent){
+        System.out.println("it is user");
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("userControlPanel.fxml"));
+
+        Scene scene = null;
+        try {
+
+
+            scene = new Scene(fxmlLoader.load(), 800, 600);
+
+            Stage stage = new Stage();
+            stage.setTitle("Biblio Book Loan System");
+            stage.setScene(scene);
+            UserPanelController userController=fxmlLoader.getController();
+            userController.setUser(user);
+            userController.initilize();
+
 
             stage.show();
             ((Node)(actionEvent.getSource())).getScene().getWindow().hide();

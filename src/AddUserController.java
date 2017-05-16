@@ -26,7 +26,7 @@ public class AddUserController  {
             if (userTypeCheckbox.isSelected()) {
                 type = "librarian";
             }
-            User result=DatabaseHandler.insertUser(new User(nameInput.getText(), emailInput.getText(), passwordInput.getText(), type));
+            User result=DatabaseHandler.insertUser(new User(nameInput.getText(), emailInput.getText(), type,passwordInput.getText()));
 
             if(result!=null){
 

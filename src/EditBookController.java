@@ -40,7 +40,7 @@ public class EditBookController {
 
     public void addDialogButton(ActionEvent actionEvent) {
 
-        Book result=DatabaseHandler.updateBook(new Book(book.getId(),titleInput.getText(), authorInput.getText(),publicationInput.getText(), locationInput.getText()));
+        Book result=DatabaseHandler.updateBook(new Book(book.getId(),titleInput.getText(), authorInput.getText(),publicationInput.getText(), locationInput.getText(),book.getStatus()));
 
         if(result!=null){
 

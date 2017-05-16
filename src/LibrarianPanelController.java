@@ -133,7 +133,46 @@ public class LibrarianPanelController implements Initializable{
     public void userSelected(MouseEvent mouseEvent) {
 
        // System.out.println(userList.getSelectionModel().getSelectedItem().getFullname());
+        final ContextMenu contextMenu = new ContextMenu();
+        MenuItem edit = new MenuItem("Edit");
+        MenuItem delete = new MenuItem("Delete");
+        contextMenu.getItems().addAll(edit,delete);
+        edit.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                FXMLLoader fxmlLoader = new FXMLLoader();
+                fxmlLoader.setLocation(getClass().getResource("editUserPanel.fxml"));
 
+                Scene scene = null;
+                try {
+                    scene = new Scene(fxmlLoader.load(), 480, 280);
+
+                    Stage stage = new Stage();
+                    stage.setTitle("Edit User");
+                    stage.setScene(scene);
+                    EditUserController editUserController=fxmlLoader.getController();
+                    editUserController.setUser(userList.getSelectionModel().getSelectedItem());
+
+                    stage.show();
+
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+        delete.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+
+                DatabaseHandler.deleteUser( userList.getSelectionModel().getSelectedItem().getId());
+                loadUserList();
+
+
+            }
+        });
+
+        userList.setContextMenu(contextMenu);
 
     }
 
@@ -180,5 +219,29 @@ public class LibrarianPanelController implements Initializable{
 
         bookList.setContextMenu(contextMenu);
 
+    }
+
+    public void exit(MouseEvent mouseEvent) {
+
+        FXMLLoader fxmlLoader = new FXMLLoader();
+        fxmlLoader.setLocation(getClass().getResource("login.fxml"));
+
+        Scene scene = null;
+        try {
+
+
+            scene = new Scene(fxmlLoader.load(), 800, 450);
+
+            Stage stage = new Stage();
+            stage.setTitle("Login");
+            stage.setScene(scene);
+
+
+
+            stage.show();
+            ((Node)(mouseEvent.getSource())).getScene().getWindow().hide();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 }

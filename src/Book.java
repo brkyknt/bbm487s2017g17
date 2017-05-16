@@ -6,6 +6,7 @@ public class Book {
 	private String author;
 	private String publication;
 	private String location;
+	private String status;
 	
 	
 	
@@ -17,15 +18,23 @@ public class Book {
 		this.publication = publication;
 		this.location = location;
 	}
-	
-	
-	public Book(int id, String title, String author, String publication, String location) {
+
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public Book(int id, String title, String author, String publication, String location, String status) {
 		super();
 		this.id = id;
 		this.title = title;
 		this.author = author;
 		this.publication = publication;
 		this.location = location;
+		this.status=status;
 	}
 
 

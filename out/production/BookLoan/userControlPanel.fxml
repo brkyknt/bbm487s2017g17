@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox prefHeight="580.0" prefWidth="790.0" xmlns="http://javafx.com/javafx/8.0.112" xmlns:fx="http://javafx.com/fxml/1" fx:controller="UserPanelController">
+  <children>
+    <MenuBar prefHeight="28.0" prefWidth="791.0" VBox.vgrow="NEVER">
+         <menus>
+            <Menu fx:id="notificationsMenu" mnemonicParsing="false" text="Notifications" />
+         </menus>
+    </MenuBar>
+    <AnchorPane maxHeight="-1.0" maxWidth="-1.0" prefHeight="389.0" prefWidth="791.0" VBox.vgrow="ALWAYS">
+         <children>
+            <VBox prefHeight="218.0" prefWidth="552.0">
+               <children>
+                  <HBox prefHeight="24.0" prefWidth="272.0">
+                     <children>
+                        <Label text="My Books">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <Label fx:id="bookCount" layoutX="10.0" layoutY="10.0" text="(0)">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                        </Label>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="bookList" onMouseClicked="#bookSelected" prefHeight="193.0" prefWidth="534.0">
+                     <columns>
+                        <TableColumn fx:id="bookTitle" prefWidth="166.0" text="Title" />
+                        <TableColumn fx:id="bookAuthor" prefWidth="131.0" text="Author" />
+                        <TableColumn fx:id="bookPublication" minWidth="0.0" prefWidth="154.0" text="Publication" />
+                        <TableColumn fx:id="bookLocation" prefWidth="100.0" text="Location" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets top="3.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+            <VBox layoutY="242.0" prefHeight="272.0" prefWidth="552.0">
+               <children>
+                  <HBox prefHeight="24.0" prefWidth="272.0">
+                     <children>
+                        <Label text="Search for books by title:">
+                           <font>
+                              <Font name="System Bold" size="15.0" />
+                           </font>
+                           <HBox.margin>
+                              <Insets right="5.0" />
+                           </HBox.margin>
+                        </Label>
+                        <TextField fx:id="searchField" onKeyReleased="#search" />
+                        <ImageView fitHeight="26.0" fitWidth="24.0" onMouseClicked="#search" pickOnBounds="true" preserveRatio="true">
+                           <image>
+                              <Image url="@search.png" />
+                           </image>
+                           <HBox.margin>
+                              <Insets left="5.0" />
+                           </HBox.margin>
+                        </ImageView>
+                     </children>
+                  </HBox>
+                  <TableView fx:id="searchBookList" onMouseClicked="#searchedBookSelected" prefHeight="239.0" prefWidth="579.0">
+                     <columns>
+                        <TableColumn fx:id="searchbookTitle" prefWidth="126.0" text="Title" />
+                        <TableColumn fx:id="searchbookAuthor" prefWidth="100.0" text="Author" />
+                        <TableColumn fx:id="searchBookPublication" prefWidth="120.0" text="Publication" />
+                        <TableColumn fx:id="searchbookLocation" prefWidth="72.0" text="Location" />
+                        <TableColumn fx:id="searchBookStatus" prefWidth="133.0" text="Status" />
+                     </columns>
+                     <VBox.margin>
+                        <Insets top="3.0" />
+                     </VBox.margin>
+                  </TableView>
+               </children>
+            </VBox>
+            <Button layoutX="593.0" layoutY="271.0" mnemonicParsing="false" prefHeight="28.0" prefWidth="142.0" text="Pay fines" />
+            <Button layoutX="593.0" layoutY="309.0" mnemonicParsing="false" onAction="#openWaitingList" prefHeight="28.0" prefWidth="142.0" text="Waiting list" />
+            <VBox layoutX="557.0" layoutY="24.0" prefHeight="203.0" prefWidth="213.0">
+               <children>
+                  <Label fx:id="welcomeName" alignment="CENTER" contentDisplay="CENTER" prefHeight="17.0" prefWidth="197.0" text="Welcome $name" textAlignment="CENTER">
+                     <font>
+                        <Font name="Inconsolata Bold" size="13.0" />
+                     </font>
+                  </Label>
+                  <Label fx:id="totalFine" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="10.0" prefHeight="17.0" prefWidth="197.0" text="total fine: $totalfine tl" textAlignment="CENTER">
+                     <font>
+                        <Font name="Inconsolata Bold" size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+                  <Label fx:id="waitingListCount" alignment="CENTER" contentDisplay="CENTER" layoutX="10.0" layoutY="32.0" prefHeight="17.0" prefWidth="197.0" text="waiting for: $n books" textAlignment="CENTER">
+                     <font>
+                        <Font name="Inconsolata Bold" size="13.0" />
+                     </font>
+                     <VBox.margin>
+                        <Insets top="5.0" />
+                     </VBox.margin>
+                  </Label>
+               </children>
+            </VBox>
+            <Button fx:id="logoutButton" layoutX="596.0" layoutY="482.0" mnemonicParsing="false" onAction="#exit" prefHeight="25.0" prefWidth="135.0" text="Logout" />
+            <ImageView fitHeight="70.0" fitWidth="104.0" layoutX="623.0" layoutY="389.0" onMouseClicked="#initilize" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@reload.png" />
+               </image>
+            </ImageView>
+         </children>
+         <VBox.margin>
+            <Insets left="15.0" top="15.0" />
+         </VBox.margin>
+    </AnchorPane>
+  </children>
+</VBox>

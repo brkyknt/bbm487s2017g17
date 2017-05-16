@@ -104,7 +104,7 @@ public class DatabaseHandler {
             stmt = conn.createStatement();
             int istaken=0;
             String sql;
-            sql = "SELECT _id,title,author,publication,librarylocation FROM librarybookloan.Books WHERE title='" + title +"' AND istaken='"+istaken+"' ";
+            sql = "SELECT _id,title,author,publication,librarylocation,status FROM librarybookloan.Books WHERE title='" + title +"' AND istaken='"+istaken+"' ";
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
@@ -113,7 +113,10 @@ public class DatabaseHandler {
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getString("publication"),
-                        rs.getString("librarylocation")));
+
+                        rs.getString("librarylocation"),
+                        rs.getString("status")));
+
 
 
             }
@@ -125,6 +128,44 @@ public class DatabaseHandler {
         }
         return books;
 
+    }
+
+
+    public static ArrayList<Book> getWaitingList(int userId){
+
+        ArrayList<Book> books=new ArrayList<>();
+        Statement stmt = null;
+
+
+        getConnection();
+
+        try {
+            stmt = conn.createStatement();
+            String sql;
+            sql = "SELECT Books._id,Books.title,author,publication,librarylocation,status FROM librarybookloan.Waitings INNER JOIN librarybookloan.Books ON Waitings.bookid=Books._id WHERE userid= '" + userId +"'";
+            ResultSet rs = stmt.executeQuery(sql);
+
+            while (rs.next()) {
+                books.add(new Book(
+                        rs.getInt("_id"),
+                        rs.getString("title"),
+                        rs.getString("author"),
+                        rs.getString("publication"),
+                        rs.getString("librarylocation"),
+                        rs.getString("status")));
+
+
+
+            }
+
+            System.out.println("books: "+books.size());
+
+            conn.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return books;
     }
 
 
@@ -142,7 +183,7 @@ public class DatabaseHandler {
             stmt = conn.createStatement();
             int istaken=0;
             String sql;
-            sql = "SELECT _id,title,author,publication,librarylocation FROM librarybookloan.Books ";
+            sql = "SELECT _id,title,author,publication,librarylocation,status FROM librarybookloan.Books ";
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
@@ -151,10 +192,13 @@ public class DatabaseHandler {
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getString("publication"),
-                        rs.getString("librarylocation")));
+
+                        rs.getString("librarylocation"),
+                        rs.getString("status")));
 
 
             }
+
 
             conn.close();
         } catch (SQLException e) {
@@ -259,13 +303,97 @@ public class DatabaseHandler {
 
             String sql;
             //sql = "INSERT INTO LIBRARYBOOKLOAN.Books(title,author,publication,librarylocation) VALUES (?,?,?,?)";
-            sql="UPDATE librarybookloan.Books SET title=?,author=?,publication=?,librarylocation=? WHERE `_id`=?";
+            sql="UPDATE librarybookloan.Books SET title=?,author=?,publication=?,librarylocation=?,status=? WHERE `_id`=?";
 
             statement = conn.prepareStatement(sql);
             statement.setString(1,input.getTitle());
             statement.setString(2,input.getAuthor());
             statement.setString(3, input.getPublication());
             statement.setString(4, input.getLocation());
+            statement.setString(5, input.getStatus());
+
+            statement.setInt(6, input.getId());
+
+            int result=statement.executeUpdate();
+            System.out.println("result: "+result);
+            conn.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            input=null;
+            e.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            input=null;
+
+            e.printStackTrace();
+        }
+
+        return input;
+
+
+
+
+    }
+
+    public static Book checkReturningBook(Book input){
+
+        PreparedStatement statement=null;
+
+
+
+        getConnection();
+
+        try {
+
+            String sql;
+            //sql = "INSERT INTO LIBRARYBOOKLOAN.Books(title,author,publication,librarylocation) VALUES (?,?,?,?)";
+            sql="UPDATE librarybookloan.Waitings SET enabled=? WHERE `bookid`=?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setInt(1,1);
+            statement.setInt(2,input.getId());
+
+
+            int result=statement.executeUpdate();
+            System.out.println("result: "+result);
+            conn.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+            input=null;
+            e.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            input=null;
+
+            e.printStackTrace();
+        }
+
+        return input;
+
+
+
+
+    }
+
+    public static User updateUser(User input){
+
+        PreparedStatement statement=null;
+
+
+
+        getConnection();
+
+        try {
+
+            String sql;
+            //sql = "INSERT INTO LIBRARYBOOKLOAN.Books(title,author,publication,librarylocation) VALUES (?,?,?,?)";
+            sql="UPDATE librarybookloan.Users SET fullname=?,email=?,password=?,type=? WHERE `_id`=?";
+
+            statement = conn.prepareStatement(sql);
+            statement.setString(1,input.getFullname());
+            statement.setString(2,input.getEmail());
+            statement.setString(3, input.getPassword());
+            statement.setString(4, input.getType());
             statement.setInt(5, input.getId());
 
             int result=statement.executeUpdate();
@@ -328,9 +456,138 @@ public class DatabaseHandler {
 
     }
 
+    public static int returnBook(Book book,int userId){
+
+        PreparedStatement statement=null;
 
 
-    public static boolean insertCheckout(int userId,int bookId){
+        int result=0;
+        getConnection();
+
+        try {
+
+            String sql;
+            //sql = "INSERT INTO LIBRARYBOOKLOAN.Books(title,author,publication,librarylocation) VALUES (?,?,?,?)";
+            sql="DELETE FROM librarybookloan.userbooks  WHERE `bookid`=?";
+
+            statement = conn.prepareStatement(sql);
+
+            statement.setInt(1,book.getId());
+
+            result=statement.executeUpdate();
+            System.out.println("result: "+result);
+            conn.close();
+
+            book.setStatus("available");
+            updateBook(book);
+            checkReturningBook(book);
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+
+            e.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            result=0;
+
+            e.printStackTrace();
+        }
+
+        return result;
+
+
+
+
+    }
+
+    public static int removeWaiting(Book book,int userId){
+
+        PreparedStatement statement=null;
+
+
+        int result=0;
+        getConnection();
+
+        try {
+
+            String sql;
+            //sql = "INSERT INTO LIBRARYBOOKLOAN.Books(title,author,publication,librarylocation) VALUES (?,?,?,?)";
+            sql="DELETE FROM librarybookloan.Waitings  WHERE `bookid`=? AND `userid`=? ";
+
+            statement = conn.prepareStatement(sql);
+
+            statement.setInt(1,book.getId());
+            statement.setInt(2,userId);
+
+
+            result=statement.executeUpdate();
+            System.out.println("result: "+result);
+            conn.close();
+
+            book.setStatus("available");
+            updateBook(book);
+            checkReturningBook(book);
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+
+            e.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            result=0;
+
+            e.printStackTrace();
+        }
+
+        return result;
+
+
+
+
+    }
+
+    public static int deleteUser(int userId){
+
+        PreparedStatement statement=null;
+
+
+        int result=0;
+        getConnection();
+
+        try {
+
+            String sql;
+
+            sql="DELETE FROM librarybookloan.Users  WHERE `_id`=?";
+
+            statement = conn.prepareStatement(sql);
+
+            statement.setInt(1,userId);
+
+            result=statement.executeUpdate();
+            System.out.println("result: "+result);
+            conn.close();
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+
+            e.printStackTrace();
+        }catch(Exception e){
+            //Handle errors for Class.forName
+            result=0;
+
+            e.printStackTrace();
+        }
+
+        return result;
+
+
+
+
+    }
+
+
+
+    public static boolean insertCheckout(int userId, Book book){
 
 
         // bu fonksiyon checkout yapacak 2 dakikalık yetiştiremedim tamamlıcam akşam.
@@ -365,10 +622,16 @@ public class DatabaseHandler {
             statement.setDate(1, Date.valueOf(startDate));
             statement.setDate(2,Date.valueOf(endDate));
             statement.setInt(3, userId);
-            statement.setInt(4, bookId);
+            statement.setInt(4, book.getId());
             statement.executeUpdate();
 
+
+
             conn.close();
+
+            book.setStatus("taken");
+            updateBook(book);
+
         } catch (SQLException e) {
             // TODO Auto-generated catch block
 
@@ -385,6 +648,55 @@ public class DatabaseHandler {
 
 
     }
+
+    public static boolean addToWaitList(int userId, Book book){
+
+
+        // bu fonksiyon checkout yapacak 2 dakikalık yetiştiremedim tamamlıcam akşam.
+
+
+        PreparedStatement statement=null;
+
+
+
+        getConnection();
+
+
+        try {
+
+            String sql;
+            sql = "INSERT INTO librarybookloan.Waitings(userid, bookid) VALUES (?,?)";
+
+
+
+            statement = conn.prepareStatement(sql);
+
+            statement.setInt(1, userId);
+            statement.setInt(2, book.getId());
+            statement.executeUpdate();
+
+
+
+            conn.close();
+
+
+        } catch (SQLException e) {
+            // TODO Auto-generated catch block
+
+            e.printStackTrace();
+            return false;
+        }catch(Exception e){
+            //Handle errors for Class.forName
+
+
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+
+
+    }
+
     public  static User insertUser(User input){
 
         PreparedStatement statement=null;
@@ -434,7 +746,7 @@ public class DatabaseHandler {
         try {
             stmt = conn.createStatement();
             String sql;
-            sql = "SELECT Books._id,Books.title,author,publication,librarylocation FROM librarybookloan.UserBooks INNER JOIN librarybookloan.Books ON UserBooks.bookid=Books._id WHERE userid= '" + id +"'";
+            sql = "SELECT Books._id,Books.title,author,publication,librarylocation,status FROM librarybookloan.UserBooks INNER JOIN librarybookloan.Books ON UserBooks.bookid=Books._id WHERE userid= '" + id +"'";
             ResultSet rs = stmt.executeQuery(sql);
 
             while (rs.next()) {
@@ -443,10 +755,15 @@ public class DatabaseHandler {
                         rs.getString("title"),
                         rs.getString("author"),
                         rs.getString("publication"),
-                        rs.getString("librarylocation")));
+
+                        rs.getString("librarylocation"),
+                        rs.getString("status")));
+
 
 
             }
+
+            System.out.println("books: "+books.size());
 
             conn.close();
         } catch (SQLException e) {

@@ -20,13 +20,20 @@ public class User {
 	}
 
 	public User(int id, String fullName, String email, String password, String type, float totalFine) {
-		super();
 		this.id = id;
 		this.fullName = fullName;
 		this.email = email;
 		this.password = password;
 		this.type = type;
 		this.totalFine = totalFine;
+	}
+
+	public User(int id, String fullName, String email, String password, String type) {
+		this.id = id;
+		this.fullName = fullName;
+		this.email = email;
+		this.password = password;
+		this.type = type;
 	}
 
 	public String getType() {
